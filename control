@@ -1,0 +1,9 @@
+Package: com.zx02.relaunch
+Name: relaunch
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Relaunch an application.
+Maintainer: Zerui Chen
+Author: Zerui Chen
+Section: Utilities
+Depends: mobilesubstrate (>= 0.9.5000)
