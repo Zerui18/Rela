@@ -1,7 +1,7 @@
 Package: com.zx02.relaunch
 Name: relaunch
 Version: 0.0.1
-Architecture: iphoneos-arm
+Architecture: all
 Description: Relaunch an application.
 Maintainer: Zerui Chen
 Author: Zerui Chen

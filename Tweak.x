@@ -12,6 +12,27 @@
 - (void) openApplication: (NSString *)bundleId options: (NSDictionary *)options withResult: (id)arg3 ;
 @end
 
+void terminateApp(NSString *bundleId) {
+	@try {
+		int pid = [[%c(FBSSystemService) sharedService] pidForApplication: bundleId];
+		if (pid) {
+			[[%c(FBSSystemService) sharedService] terminateApplication: bundleId forReason: 2 andReport: false withDescription: nil];
+		}
+	}
+	@catch (NSException *exception) {
+		NSLog(@"[RELA] (terminateApp) Exception: %@", exception);
+	}
+}
+
+void launchApp(NSString *bundleId) {
+	@try {
+		[[%c(FBSSystemService) sharedService] openApplication: bundleId options: nil withResult: nil];
+	}
+	@catch (NSException *exception) {
+		NSLog(@"[RELA] (launchApp) Exception: %@", exception);
+	}
+}
+
 %ctor {
 	[NSDistributedNotificationCenter.defaultCenter
 		addObserverForName: @"com.zx02.relaunch"
@@ -20,16 +41,8 @@
 		queue: NSOperationQueue.mainQueue
 		usingBlock: ^(NSNotification *notification) {
 			NSString *bundleId = [notification.userInfo valueForKey: @"bundleId"];
-
-            // Kill app if already launched
-            int pid = [[%c(FBSSystemService) sharedService] pidForApplication: bundleId];
-            if (pid) {
-                [[%c(FBSSystemService) sharedService] terminateApplication: bundleId forReason: 2 andReport: false withDescription: nil];
-            }
-
-            // Launch app
-            [[%c(FBSSystemService) sharedService] openApplication: bundleId options: nil withResult: nil];
-
+            terminateApp(bundleId);
+			launchApp(bundleId);
 		}
 	];
 }
